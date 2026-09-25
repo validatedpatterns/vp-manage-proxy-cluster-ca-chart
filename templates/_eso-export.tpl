@@ -1,13 +1,13 @@
 {{/*
-Image for ESO export Jobs/CronJobs. Defaults to ose-cli (non-root, OpenShift-compatible).
+Image for ESO export Jobs/CronJobs. Defaults to ose-cli-rhel9 (non-root, OpenShift-compatible).
 Hub gather/sync Jobs continue to use values.image (imperative-container).
 */}}
 {{- define "vpProxyCa.esoExportImageRepository" -}}
-{{- .Values.eso.export.image.repository | default "registry.redhat.io/openshift4/ose-cli" -}}
+{{- .Values.eso.export.image.repository | default "registry.redhat.io/openshift4/ose-cli-rhel9" -}}
 {{- end }}
 
 {{- define "vpProxyCa.esoExportImageTag" -}}
-{{- .Values.eso.export.image.tag | default "latest" -}}
+{{- .Values.eso.export.image.tag | default "v4.22" -}}
 {{- end }}
 
 {{- define "vpProxyCa.esoExportImagePullPolicy" -}}

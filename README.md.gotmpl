@@ -370,7 +370,7 @@ Sync order (Argo CD waves):
 | 11 | **ExternalSecret** (needs **`vault-backend`** Ready + at least one **PushSecret** write) |
 | 12 | **Proxy patch sync Job** (Argo **`hook: Sync`**) — hub **`hub-export`** + **`Proxy/cluster`** |
 
-If **PushSecret** shows **`could not get source secret`**, the export Job has not succeeded yet (see export Job logs). Export Jobs use **`registry.redhat.io/openshift4/ose-cli`** by default — not **`imperative-container`** (root USER + **`hostUsers: false`** causes **`setgroups: Invalid argument`** on restricted-v3).
+If **PushSecret** shows **`could not get source secret`**, the export Job has not succeeded yet (see export Job logs). Export Jobs use **`registry.redhat.io/openshift4/ose-cli-rhel9:v4.22`** by default — not **`imperative-container`** (root USER + **`hostUsers: false`** causes **`setgroups: Invalid argument`** on restricted-v3).
 
 ### Troubleshooting: Argo CD `one or more synchronization tasks completed unsuccessfully`
 
@@ -492,7 +492,7 @@ If **vault-backend** stays **NotReady**, the root cause is in platform Vault/ESO
 
 ### v0.2.2
 
-- Change sync job to use `registry.redhat.io/openshift4/ose-cli-rhel9` as the ose-cli repository has stopped
+- Change sync, export, and trust-test jobs to use `registry.redhat.io/openshift4/ose-cli-rhel9:v4.22` as the ose-cli repository has stopped
   publishing a `:latest` tag. Using the standard imperative/utility containers will not work because the job
   needs to run under a restricted-v3 SCC. Using the internal imagestream is not preferable because that is
   not guaranteed to exist on non-cloud clusters.

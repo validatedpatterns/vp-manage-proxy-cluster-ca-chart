@@ -365,7 +365,7 @@ Sync order (Argo CD waves):
 | 11 | **ExternalSecret** (needs **`vault-backend`** Ready + at least one **PushSecret** write) |
 | 12 | **Proxy patch sync Job** (Argo **`hook: Sync`**) — hub **`hub-export`** + **`Proxy/cluster`** |
 
-If **PushSecret** shows **`could not get source secret`**, the export Job has not succeeded yet (see export Job logs). Export Jobs use **`registry.redhat.io/openshift4/ose-cli`** by default — not **`imperative-container`** (root USER + **`hostUsers: false`** causes **`setgroups: Invalid argument`** on restricted-v3).
+If **PushSecret** shows **`could not get source secret`**, the export Job has not succeeded yet (see export Job logs). Export Jobs use **`registry.redhat.io/openshift4/ose-cli-rhel9:v4.22`** by default — not **`imperative-container`** (root USER + **`hostUsers: false`** causes **`setgroups: Invalid argument`** on restricted-v3).
 
 ### Troubleshooting: Argo CD `one or more synchronization tasks completed unsuccessfully`
 
@@ -486,7 +486,7 @@ If **vault-backend** stays **NotReady**, the root cause is in platform Vault/ESO
 
 ### v0.2.2
 
-- Change sync job to use `registry.redhat.io/openshift4/ose-cli-rhel9` as the ose-cli repository has stopped
+- Change sync, export, and trust-test jobs to use `registry.redhat.io/openshift4/ose-cli-rhel9:v4.22` as the ose-cli repository has stopped
   publishing a `:latest` tag. Using the standard imperative/utility containers will not work because the job
   needs to run under a restricted-v3 SCC. Using the internal imagestream is not preferable because that is
   not guaranteed to exist on non-cloud clusters.
@@ -524,7 +524,7 @@ If **vault-backend** stays **NotReady**, the root cause is in platform Vault/ESO
 | eso.argoCDSyncWave | int | `11` | Default Argo CD sync-wave for ExternalSecret when externalSecret.argoCDSyncWave is unset (after PushSecret). |
 | eso.export.argoCDSyncWave | int | `8` | Argo CD sync-wave for export namespace/RBAC/CronJob (before export sync Job). |
 | eso.export.enabled | bool | `true` | When true, render export namespace, CronJob, sync Job, and PushSecret on this cluster. |
-| eso.export.image | object | `{"pullPolicy":"IfNotPresent","repository":"registry.redhat.io/openshift4/ose-cli","tag":"latest"}` | Image for export Jobs (ose-cli avoids setgroups errors from root-based imperative-container). |
+| eso.export.image | object | `{"pullPolicy":"IfNotPresent","repository":"registry.redhat.io/openshift4/ose-cli-rhel9","tag":"v4.22"}` | Image for export Jobs (ose-cli-rhel9 avoids setgroups errors from root-based imperative-container). |
 | eso.export.key | string | `"ca-bundle.crt"` |  |
 | eso.export.namespace | string | `"vp-proxy-ca-sync"` |  |
 | eso.export.schedule | string | `"*/10 * * * *"` |  |
@@ -613,8 +613,8 @@ If **vault-backend** stays **NotReady**, the root cause is in platform Vault/ESO
 | trustTest.exportSecret.namespace | string | `""` | Namespace of the import Secret (defaults to trustManager.trustNamespace). |
 | trustTest.failedJobsHistoryLimit | int | `3` |  |
 | trustTest.image.pullPolicy | string | `"IfNotPresent"` |  |
-| trustTest.image.repository | string | `"registry.redhat.io/openshift4/ose-cli"` | ose-cli includes oc and curl; avoids setgroups errors from root-based imperative-container. |
-| trustTest.image.tag | string | `"latest"` |  |
+| trustTest.image.repository | string | `"registry.redhat.io/openshift4/ose-cli-rhel9"` | ose-cli-rhel9 includes oc and curl; avoids setgroups errors from root-based imperative-container. |
+| trustTest.image.tag | string | `"v4.22"` |  |
 | trustTest.includeLocalCluster | bool | `true` |  |
 | trustTest.ingress.additional | list | `[]` | Extra ingress checks expanded per cluster apps domain (hostTemplate) or fixed url. - name: config-demo   hostTemplate: "config-demo-config-demo.%s"   path: "/index.html" - name: vault   url: "https://vault.example.com/v1/sys/health" |
 | trustTest.ingress.console | object | `{"enabled":true,"hostTemplate":"console-openshift-console.%s","path":"/","routeName":"console","routeNamespace":"openshift-console"}` | Default ingress TLS check uses the OpenShift console on the cluster apps domain. |
