@@ -1,7 +1,7 @@
 
 # vp-manage-proxy-cluster-ca
 
-![Version: 0.2.1](https://img.shields.io/badge/Version-0.2.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
+![Version: 0.2.2](https://img.shields.io/badge/Version-0.2.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square)
 
 OpenShift chart for cluster-wide Proxy trusted CA bundles. Each cluster exports CAs via ESO PushSecret to Vault; ExternalSecret and trust-manager Bundle merge labeled Secrets into openshift-config. Hub CronJob writes hub-export material and patches Proxy/cluster. No ACM or ManifestWork required.
 
@@ -484,6 +484,13 @@ If **vault-backend** stays **NotReady**, the root cause is in platform Vault/ESO
 
 ## Notable changes
 
+### v0.2.2
+
+- Change sync job to use `registry.redhat.io/openshift4/ose-cli-rhel9` as the ose-cli repository has stopped
+  publishing a `:latest` tag. Using the standard imperative/utility containers will not work because the job
+  needs to run under a restricted-v3 SCC. Using the internal imagestream is not preferable because that is
+  not guaranteed to exist on non-cloud clusters.
+
 ### v0.2.1
 
 - Set ESO 1.0-compatible ExternalSecret extract and PushSecret `conversionStrategy` defaults in
@@ -564,7 +571,7 @@ If **vault-backend** stays **NotReady**, the root cause is in platform Vault/ESO
 | serviceAccount.name | string | `""` |  |
 | syncJob.argoCDSyncWave | int | `12` |  |
 | syncJob.enabled | bool | `true` |  |
-| syncJob.image | object | `{"pullPolicy":"IfNotPresent","repository":"registry.redhat.io/openshift4/ose-cli","tag":"latest"}` | ose-cli avoids setgroups errors from root-based imperative-container on restricted SCC. |
+| syncJob.image | object | `{"pullPolicy":"IfNotPresent","repository":"registry.redhat.io/openshift4/ose-cli-rhel9","tag":"v4.22"}` | ose-cli avoids setgroups errors from root-based imperative-container on restricted SCC. ...but it stopped publishing a latest tag so we shift to a new stream The image doesn't need to match OpenShift version exactly, but we should keep an eye on this during the 5.0 transition |
 | targetNamespace | string | `"openshift-config"` |  |
 | trustManager.bundle.argoCDSyncWave | int | `7` |  |
 | trustManager.bundle.sources | list | `[{"secret":{"includeAllKeys":true,"selector":{"matchLabels":{"cluster-ca.vp.io/component":"export"}}}},{"secret":{"key":"ca-bundle.crt","selector":{"matchLabels":{"cluster-ca.vp.io/component":"hub-export"}}}}]` | trust-manager Bundle spec.sources. Spoke PushSecrets label hub Secrets with labels.export; hub gather job labels hub-export Secret with labels.hubExport. |

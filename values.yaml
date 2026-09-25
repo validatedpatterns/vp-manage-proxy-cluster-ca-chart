@@ -130,9 +130,12 @@ syncJob:
   enabled: true
   argoCDSyncWave: 12
   # -- ose-cli avoids setgroups errors from root-based imperative-container on restricted SCC.
+  # ...but it stopped publishing a latest tag so we shift to a new stream
+  # The image doesn't need to match OpenShift version exactly, but we should keep an eye on this
+  # during the 5.0 transition
   image:
-    repository: registry.redhat.io/openshift4/ose-cli
-    tag: latest
+    repository: registry.redhat.io/openshift4/ose-cli-rhel9
+    tag: v4.22
     pullPolicy: IfNotPresent
   # -- Optional pod/container securityContext overrides (omit for SCC-assigned UID with ose-cli).
   # podSecurityContext: {}

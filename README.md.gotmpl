@@ -490,6 +490,13 @@ If **vault-backend** stays **NotReady**, the root cause is in platform Vault/ESO
 
 ## Notable changes
 
+### v0.2.2
+
+- Change sync job to use `registry.redhat.io/openshift4/ose-cli-rhel9` as the ose-cli repository has stopped
+  publishing a `:latest` tag. Using the standard imperative/utility containers will not work because the job
+  needs to run under a restricted-v3 SCC. Using the internal imagestream is not preferable because that is
+  not guaranteed to exist on non-cloud clusters.
+
 ### v0.2.1
 
 - Set ESO 1.0-compatible ExternalSecret extract and PushSecret `conversionStrategy` defaults in
