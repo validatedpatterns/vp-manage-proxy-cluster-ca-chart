@@ -60,7 +60,7 @@ Hub CronJob container (imperative-container + container securityContext).
 {{- end }}
 
 {{/*
-One-shot sync Job container (ose-cli by default; omit securityContext unless syncJob.containerSecurityContext set).
+One-shot sync Job container (ose-cli-rhel9 by default; omit securityContext unless syncJob.containerSecurityContext set).
 */}}
 {{- define "vpProxyCa.syncJobContainer" }}
 {{- $hasAdditional := gt (len .Values.additionalCaBundles) 0 }}

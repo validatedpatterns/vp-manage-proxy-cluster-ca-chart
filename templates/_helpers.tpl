@@ -160,14 +160,14 @@ argocd.argoproj.io/sync-wave: {{ $wave | quote }}
 {{- end }}
 
 {{/*
-Image for gather/sync Job (ose-cli by default; imperative-container optional via syncJob.image).
+Image for gather/sync Job (ose-cli-rhel9 by default; imperative-container optional via syncJob.image).
 */}}
 {{- define "vpProxyCa.syncJobImageRepository" -}}
-{{- .Values.syncJob.image.repository | default "registry.redhat.io/openshift4/ose-cli" -}}
+{{- .Values.syncJob.image.repository | default "registry.redhat.io/openshift4/ose-cli-rhel9" -}}
 {{- end }}
 
 {{- define "vpProxyCa.syncJobImageTag" -}}
-{{- .Values.syncJob.image.tag | default "latest" -}}
+{{- .Values.syncJob.image.tag | default "v4.22" -}}
 {{- end }}
 
 {{- define "vpProxyCa.syncJobImagePullPolicy" -}}
@@ -183,14 +183,14 @@ argocd.argoproj.io/sync-wave: {{ $wave | quote }}
 {{- end }}
 
 {{/*
-Image for trust-test CronJobs. Defaults to ose-cli (includes oc and curl).
+Image for trust-test CronJobs. Defaults to ose-cli-rhel9 (includes oc and curl).
 */}}
 {{- define "vpProxyCa.trustTestImageRepository" -}}
-{{- .Values.trustTest.image.repository | default "registry.redhat.io/openshift4/ose-cli" -}}
+{{- .Values.trustTest.image.repository | default "registry.redhat.io/openshift4/ose-cli-rhel9" -}}
 {{- end }}
 
 {{- define "vpProxyCa.trustTestImageTag" -}}
-{{- .Values.trustTest.image.tag | default "latest" -}}
+{{- .Values.trustTest.image.tag | default "v4.22" -}}
 {{- end }}
 
 {{- define "vpProxyCa.trustTestImagePullPolicy" -}}

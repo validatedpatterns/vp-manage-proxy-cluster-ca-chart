@@ -39,7 +39,7 @@ tests:
           value: BeforeHookCreation,HookSucceeded
       - matchRegex:
           path: spec.template.spec.containers[0].image
-          pattern: "^registry\\.redhat\\.io/openshift4/ose-cli:"
+          pattern: "^registry\\.redhat\\.io/openshift4/ose-cli-rhel9:v4\\.22$"
       - notExists:
           path: spec.template.spec.securityContext
       - notExists:

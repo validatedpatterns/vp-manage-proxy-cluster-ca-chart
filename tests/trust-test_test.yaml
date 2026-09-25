@@ -92,7 +92,7 @@ tests:
           path: spec.jobTemplate.spec.template.spec.volumes[1].configMap.name
           value: vp-pattern-proxy-ca-bundle-by-label
 
-  - it: renders trust-test CronJob with ose-cli image
+  - it: renders trust-test CronJob with ose-cli-rhel9 image
     set:
       trustTest:
         enabled: true
@@ -102,7 +102,7 @@ tests:
     asserts:
       - matchRegex:
           path: spec.jobTemplate.spec.template.spec.containers[0].image
-          pattern: "^registry\\.redhat\\.io/openshift4/ose-cli:"
+          pattern: "^registry\\.redhat\\.io/openshift4/ose-cli-rhel9:v4\\.22$"
 
   - it: defaults ingress checks to OpenShift console host template
     set:

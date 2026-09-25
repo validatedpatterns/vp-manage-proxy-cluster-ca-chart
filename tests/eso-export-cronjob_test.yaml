@@ -4,7 +4,7 @@ templates:
 release:
   name: testrel
 tests:
-  - it: renders export CronJob with ose-cli image
+  - it: renders export CronJob with ose-cli-rhel9 image
     set:
       eso:
         export:
@@ -15,7 +15,7 @@ tests:
           of: CronJob
       - matchRegex:
           path: spec.jobTemplate.spec.template.spec.containers[0].image
-          pattern: "^registry\\.redhat\\.io/openshift4/ose-cli:"
+          pattern: "^registry\\.redhat\\.io/openshift4/ose-cli-rhel9:v4\\.22$"
       - contains:
           path: spec.jobTemplate.spec.template.spec.containers[0].env
           content:
